@@ -412,13 +412,13 @@ contract SaFuTrendz is Context, IERC20, Ownable {
     address[] private _excluded;
    
     uint256 private constant MAX = ~uint256(0);
-    uint256 private _tTotal = 10_000_000_000 * 10**18;
-    uint256 private _rTotal = (MAX - (MAX % _tTotal));
+    uint256 private _tTotal; // = 10_000_000_000 * 10**18;
+    uint256 private _rTotal; // = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
-    string private _name   = "SaFuTrendz";
-    string private _symbol  = "SAFU";
-    uint8 private _decimals  = 18;
+    string private _name;
+    string private _symbol;
+    uint8 private _decimals;
     
     uint256 public _rewardFee = 2;
     uint256 private _previousRewardFee = _rewardFee;
@@ -433,11 +433,11 @@ contract SaFuTrendz is Context, IERC20, Ownable {
     
     uint256 private maxTxPercent = 2; // Less fields to edit
     uint256 private maxTxDivisor = 100;
-    uint256 private _maxTxAmount = (_tTotal * maxTxPercent) / maxTxDivisor;
+    uint256 private _maxTxAmount; // = (_tTotal * maxTxPercent) / maxTxDivisor;
     uint256 public  _maxTxAmountUI = _maxTxAmount;
     uint256 private _previousMaxTxAmount = _maxTxAmount;
-    
-    uint256 private numTokensSellToAddToLiquidity = (_tTotal * 2) / 100000;
+
+    uint256 private numTokensSellToAddToLiquidity; // = (_tTotal * 2) / 100000;
     uint256 public pubTokensSellToAddToLiquidity = numTokensSellToAddToLiquidity;
 
     IUniswapV2Router02 public uniswapV2Router;
@@ -470,17 +470,25 @@ contract SaFuTrendz is Context, IERC20, Ownable {
         inSwapAndLiquify = false;
     }
     
-    constructor () {
+    constructor (string memory tokenName, 
+                string memory tokenSymbol, 
+                uint8 tokenDecimals, 
+                uint256 tokenTotal, 
+                address uniSwapRouter) 
+    {
 
-        // _name = tokenName;
-        // _symbol = tokenSymbol;
-        // _decimals = tokenDecimals;
-
+        _name = tokenName;
+        _symbol = tokenSymbol;
+        _decimals = tokenDecimals;
+        _tTotal = tokenTotal * 10**18;
+        _rTotal = (MAX - (MAX % _tTotal));
+        _maxTxAmount = (_tTotal * maxTxPercent) / maxTxDivisor;
+        numTokensSellToAddToLiquidity = (_tTotal * 2) / 100000;
 
         _rOwned[_msgSender()] = _rTotal;
         
         //Now references the padswap network: https://docs.toad.network/products/padswap#padswap-router-and-factory-contracts
-        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0xD99D1c33F9fC3444f8101754aBC46c52416550D1);
+        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(uniSwapRouter);
         //      router = PadSwapRouter(0x76437234D29f84D9A12820A137c6c6A719138C24); // Mainnet
         //                             0xD99D1c33F9fC3444f8101754aBC46c52416550D1   // Testnet
         

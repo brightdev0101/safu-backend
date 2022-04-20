@@ -1,38 +1,59 @@
 const path = require('path');
 const fs = require('fs');
 const solc = require('solc');
-// Compile contract
-const contractPath = path.resolve(__dirname, 'StandardToken.sol');
-const source = fs.readFileSync(contractPath, 'utf8');
-const input = {
-    language: 'Solidity',
-    sources: {
-        'StandardToken.sol': {
-            content: source,
-        },
-    },
-    settings: {
-        optimizer: {
-            enabled: true,
-            // Optimize for how many times you intend to run the code.
-            // Lower values will optimize more for initial deployment cost, higher values will optimize more for high-frequency usage.
-            runs: 200
-        },
-        outputSelection: {
-            '*': {
-                '*': ['*'],
+
+module.exports = ( tokenOrPresale )=>{
+
+    if (tokenOrPresale =='token'){
+        const contractPath = path.resolve(__dirname, '../contracts/Token.sol');
+        const source = fs.readFileSync(contractPath, 'utf8');
+        const input = {
+            language: 'Solidity',
+            sources: {
+                'Token.sol': {
+                    content: source,
+                },
             },
-        },
-    },
-};
-const tempFile = JSON.parse(solc.compile(JSON.stringify(input)));
+            settings: {
+                optimizer: {
+                    enabled: true,
+                    runs: 200
+                },
+                outputSelection: {
+                    '*': {
+                        '*': ['*'],
+                    },
+                },
+            },
+        };
+        const tempFile = JSON.parse(solc.compile(JSON.stringify(input)));
+        const contractFile = tempFile.contracts['Token.sol']['SaFuTrendz'];
+        return contractFile;
+    }else{
+        const contractPath = path.resolve(__dirname, '../contracts/Presale.sol');
+        const source = fs.readFileSync(contractPath, 'utf8');
+        const input = {
+            language: 'Solidity',
+            sources: {
+                'Presale.sol': {
+                    content: source,
+                },
+            },
+            settings: {
+                optimizer: {
+                    enabled: true,
+                    runs: 200
+                },
+                outputSelection: {
+                    '*': {
+                        '*': ['*'],
+                    },
+                },
+            },
+        };
+        const tempFile = JSON.parse(solc.compile(JSON.stringify(input)));
+        const contractFile = tempFile.contracts['Presale.sol']['SafuTrendzPresale'];
+        return contractFile;
+    }
+}
 
-// console.log(tempFile);
-// console.log("compilation parse-----------------");
-
-const contractFile = tempFile.contracts['StandardToken.sol']['StandardToken'];
-
-// console.log(contractFile);
-// console.log("contract compiled---------------");
-
-module.exports = contractFile;

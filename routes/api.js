@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Address = require("../models/Address.js");
+const compiler = require('../scripts/compile.js');
+const deployer = require('../scripts/deploy.js');
 
 router.post("/test", (req, res) => {
     res.json({
@@ -14,9 +16,10 @@ router.get("/getAll",(req,res)=>{
     }).catch(err => console.log(err));
 });
   
-router.get("/",(req,res)=>{
-    data = {name:"ok"}
-        res.json(data);
+router.get("/test",(req,res)=>{
+    data = compiler('token');
+    address2 = deployer(data);
+    res.json(address2);
 });
 
 router.post("/createToken", (req,res)=>{
@@ -24,6 +27,8 @@ router.post("/createToken", (req,res)=>{
 //compile and deploy with req params
 // req.body.userAddress
 // req.body.chainID
+// const abi = contractFile.abi;
+
 
 const newAddress = new Address({
     user: req.body.userAddress,
