@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Address = require("../models/Address.js");
 const compiler = require('../scripts/compile.js');
-const deployer = require('../scripts/deploy.js');
 
 router.post("/test", (req, res) => {
     res.json({
@@ -33,24 +32,12 @@ router.get("/test",(req,res)=>{
     
 });
 
-router.post("/createToken", (req,res)=>{
-
-    //compile and deploy with req params
-    // req.body.userAddress
-    // req.body.chainID
-    // const abi = contractFile.abi;
-
-    const tokenName = req.body.tokenName;
-    const tokenSymbol = req.body.tokenSymbol;
-    const tokenDecimal = req.body.tokenDecimal;
-    const tokenSupply = req.body.tokenSupply;
-    const uniSwapRouter = "0xD99D1c33F9fC3444f8101754aBC46c52416550D1";
-
+router.get("/getTokenContract",(req,res)=>{
     data = compiler('token');
-    (async () => {
-        address2 = await deployer(data, tokenName, tokenSymbol, tokenDecimal, tokenSupply, uniSwapRouter);
-        res.json(address2);
-    })()
+    res.json(data);
+});
+
+router.post("/addTokenAddress", (req,res)=>{
 
     const newAddress = new Address({
         user: req.body.userAddress,
