@@ -41,7 +41,7 @@ router.post("/addTokenAddress", (req,res)=>{
 
     const newAddress = new Address({
         user: req.body.userAddress,
-        token: "",// token address from deployment
+        token: req.body.tokenAddress, // token address from deployment
         chainID: req.body.chainID
     });
 

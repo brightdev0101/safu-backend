@@ -3,9 +3,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cors = require("cors");
 const api = require("./routes/api.js");
 
+
 const app = express();
+
+app.options("*", cors({ origin: 'http://localhost:3000', optionsSuccessStatus: 200 }));
+app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
 
 app.use(
   bodyParser.urlencoded({
@@ -31,6 +36,6 @@ if (process.env.NODE_ENV === "production") {
 
 app.use("/api", api);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

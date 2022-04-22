@@ -27,7 +27,7 @@ module.exports = ( tokenOrPresale )=>{
             },
         };
         const tempFile = JSON.parse(solc.compile(JSON.stringify(input)));
-        const contractFile = tempFile.contracts['Token.sol']['SaFuTrendz'];
+        const contractFile = tempFile.contracts['Token.sol']['StandardToken'];
         return contractFile;
     }else{
         const contractPath = path.resolve(__dirname, '../contracts/Presale.sol');
@@ -42,7 +42,7 @@ module.exports = ( tokenOrPresale )=>{
             settings: {
                 optimizer: {
                     enabled: true,
-                    runs: 200
+                    runs: 1
                 },
                 outputSelection: {
                     '*': {
