@@ -3,12 +3,7 @@ const router = express.Router();
 const Address = require("../models/Address.js");
 const compiler = require('../scripts/compile.js');
 
-router.post("/test", (req, res) => {
-    res.json({
-      user: req.body.userAddress
-    });
-  });
-  
+ 
 router.get("/getAll",(req,res)=>{
     Address.find({}).then(data=>{
         res.json(data);
@@ -51,7 +46,12 @@ router.post("/addTokenAddress", (req,res)=>{
 
 });
 
-router.post("/createPad", (req,res)=>{
+router.get("/getPresaleContract",(req,res)=>{
+    data = compiler('presale');
+    res.json(data);
+})
+
+router.post("/addPresaleAddress", (req,res)=>{
 
     //compile and deploy with req params
     // req.body.userAddress
@@ -61,11 +61,11 @@ router.post("/createPad", (req,res)=>{
     updateAddress = {};
     updateAddress.user = req.body.userAddress;
     updateAddress.token = req.body.tokenAddress;
-    updateAddress.launchpad = ""; // launchpad address acquired from deployment
+    updateAddress.launchpad = req.body.presaleAddress;
     updateAddress.chainID = req.body.chainID;
 
     Address.findOneAndUpdate(
-        { user: req.body.userAddress },
+        { token: req.body.tokenAddress },
         { $set: updateAddress },
         { new: true }
     ).then(profile => res.json(profile));

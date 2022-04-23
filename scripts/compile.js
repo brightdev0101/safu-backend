@@ -32,6 +32,7 @@ module.exports = ( tokenOrPresale )=>{
     }else{
         const contractPath = path.resolve(__dirname, '../contracts/Presale.sol');
         const source = fs.readFileSync(contractPath, 'utf8');
+
         const input = {
             language: 'Solidity',
             sources: {
@@ -52,7 +53,9 @@ module.exports = ( tokenOrPresale )=>{
             },
         };
         const tempFile = JSON.parse(solc.compile(JSON.stringify(input)));
+
         const contractFile = tempFile.contracts['Presale.sol']['SafuTrendzPresale'];
+
         return contractFile;
     }
 }
