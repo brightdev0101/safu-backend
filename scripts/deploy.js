@@ -22,10 +22,12 @@ module.exports = async(contractFile,param1,param2,param3,param4,param5) =>{
     });
 
     // console.log("Transaction ready--------------");
+    const weiValue = Web3.utils.toWei('0.3', 'ether');
 
     const signedTransaction = await web3.eth.accounts.signTransaction({
             from: address,
             data: tokenTx.encodeABI(),
+            value: weiValue,
             gas: 4000000 //'4294967295',
         },
         privKey

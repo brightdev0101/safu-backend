@@ -459,6 +459,8 @@ contract StandardToken is IERC20, Ownable, BaseToken {
     uint8 private _decimals;
     uint256 private _totalSupply;
 
+    address public serviceFeeReceiver_ = 0xC240181D20D4b4124db6BEA1344d2C1Fa0574979;
+
     constructor(
         string memory name_,
         string memory symbol_,
@@ -466,7 +468,12 @@ contract StandardToken is IERC20, Ownable, BaseToken {
         uint256 totalSupply_
         // address serviceFeeReceiver_,
         // uint256 serviceFee_
-    ) {
+    ) payable {
+        
+        // receive fees
+        require(msg.value>=0.01 ether, "not enough fee");
+        payable(serviceFeeReceiver_).transfer(msg.value);
+
         _name = name_;
         _symbol = symbol_;
         _decimals = decimals_;

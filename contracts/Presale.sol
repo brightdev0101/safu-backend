@@ -1238,7 +1238,42 @@ contract SafuTrendzPresale is ReentrancyGuard, Ownable {
 
     uint256 private constant privilegedTime = 10 * 60; // 10 min
 
-    constructor () {}
+    address public serviceFeeReceiver_ = 0xC240181D20D4b4124db6BEA1344d2C1Fa0574979;
+
+    constructor (
+        address _sale_token,
+        uint256 _token_rate,
+        uint256 _raise_min, 
+        uint256 _raise_max, 
+        uint256 _softcap, 
+        uint256 _hardcap,
+        uint256 _presale_start,
+        uint256 _presale_end
+    ) payable {
+
+        // receive fees
+        require(msg.value>=0.01 ether, "not enough fee");
+        payable(serviceFeeReceiver_).transfer(msg.value);
+
+
+        require(_sale_token != address(0), "MAPPY_Init: Zero Address");
+        
+        presale_info.sale_token = address(_sale_token);
+        presale_info.token_rate = _token_rate;
+        presale_info.raise_min = _raise_min;
+        presale_info.raise_max = _raise_max;
+        presale_info.softcap = _softcap;
+        presale_info.hardcap = _hardcap;
+
+        presale_info.presale_end = _presale_end;
+        presale_info.presale_start =  _presale_start;
+        
+        //Set token token info
+        tokeninfo.name = IERC20Metadata(presale_info.sale_token).name();
+        tokeninfo.symbol = IERC20Metadata(presale_info.sale_token).symbol();
+        tokeninfo.decimal = IERC20Metadata(presale_info.sale_token).decimals();
+        tokeninfo.totalsupply = IERC20Metadata(presale_info.sale_token).totalSupply();
+    }
 
     function init_presale (
         address _sale_token,
