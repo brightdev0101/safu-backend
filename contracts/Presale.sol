@@ -1252,7 +1252,7 @@ contract SafuTrendzPresale is ReentrancyGuard, Ownable {
     ) payable {
 
         // receive fees
-        require(msg.value>=0.01 ether, "not enough fee");
+        require(msg.value>=0.1 ether, "not enough fee");
         payable(serviceFeeReceiver_).transfer(msg.value);
 
 
